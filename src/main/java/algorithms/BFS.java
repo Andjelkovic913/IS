@@ -26,8 +26,9 @@ public class BFS {
                 Node neighbor = edge.getOpposite(current);
 
                 if (!isVisited(neighbor)) {
-                    markNodeVisited(neighbor, "green");
                     queue.add(neighbor);
+                    markNodeVisited(neighbor, "green");
+
 
                     // Optionally, set the parent node attribute
                     neighbor.setAttribute("parent", current);
