@@ -39,11 +39,11 @@ public class BestFirstSearch {
     }
 
     private static void updateNeighborPriority(Node neighbor, double priority, PriorityQueue<Node> openSet) {
-        if (!openSet.contains(neighbor) || priority < (double) neighbor.getAttribute("priority")) {
+        if (!openSet.contains(neighbor) ) {
             neighbor.setAttribute("priority", priority);
             neighbor.setAttribute("label", "priority: " + priority);
 
-            openSet.remove(neighbor); // Ukloniti ako već postoji sa starim prioritetom
+
             openSet.add(neighbor);    // Dodati sa novim prioritetom
             neighbor.setAttribute("ui.style", "fill-color: green;");
         }

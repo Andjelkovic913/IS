@@ -1,4 +1,3 @@
-
 import algorithms.*;
 import org.graphstream.graph.*;
 import org.graphstream.graph.implementations.SingleGraph;
@@ -6,7 +5,6 @@ import org.graphstream.graph.implementations.SingleGraph;
 import javax.swing.*;
 import java.awt.*;
 import java.util.Random;
-import java.util.Scanner;
 
 public class Test2 {
 
@@ -50,7 +48,14 @@ public class Test2 {
 
         Thread.sleep(2000);
 
-        int heuristic_choice = 0;
+        // Calculate and display heuristic values
+        Node targetNode = graph.getNode("A 14");
+        for (Node node : graph) {
+            double heuristic = HillClimb.getHeuristicValue(node, targetNode);
+            node.setAttribute("ui.label", node.getAttribute("ui.label") + " (h=" + String.format("%.2f", heuristic) + ")");
+            System.out.println("Node " + node.getId() + " heuristic: " + heuristic);
+        }
+
         JFrame prozor = new JFrame();
         prozor.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         prozor.setSize(400, 200);
@@ -60,7 +65,7 @@ public class Test2 {
         JComboBox<String> opcije = new JComboBox<>(algoritmi);
         JButton runButton = new JButton("Run");
 
-        runButton.addActionListener(e->{
+        runButton.addActionListener(e -> {
             int izbor = opcije.getSelectedIndex();
             new Thread(() -> {
                 try {
@@ -96,5 +101,4 @@ public class Test2 {
         prozor.add(runButton, BorderLayout.SOUTH);
         prozor.setVisible(true);
     }
-
 }
