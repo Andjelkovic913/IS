@@ -12,6 +12,7 @@ public class BestFirstSearch {
         // Koristimo istu heuristiku kao u HillClimbing
         startNode.setAttribute("priority", getHeuristicValue(startNode, targetNode));
         openSet.add(startNode);
+        markNodeVisited(startNode,"blue", nodeVisitDelay);
 
         while (!openSet.isEmpty()) {
             Node current = openSet.poll();
@@ -46,11 +47,13 @@ public class BestFirstSearch {
 
             openSet.add(neighbor);    // Dodati sa novim prioritetom
             neighbor.setAttribute("ui.style", "fill-color: green;");
+            neighbor.setAttribute("visited", true);
         }
     }
 
     private static void markNodeVisited(Node node, String color, int delay) throws InterruptedException {
         node.setAttribute("ui.style", "fill-color: " + color + ";");
+        node.setAttribute("visited", true);
         Thread.sleep(delay);
     }
 

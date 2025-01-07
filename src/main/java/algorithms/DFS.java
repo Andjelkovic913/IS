@@ -7,27 +7,24 @@ public class DFS {
 
     public static void dfs(Graph graph, Node startNode, Node targetNode, int nodeVisitDelay, int edgeVisitDelay) throws InterruptedException {
         Stack<Node> stack = new Stack<>();
-        stack.push(startNode);
+        stack.add(startNode);
+        startNode.setAttribute("visited", true);
 
         while (!stack.isEmpty()) {
             Node current = stack.pop();
+            markNodeVisited(current, "blue", nodeVisitDelay);
 
-            if (current.getAttribute("visited") == null) {
-                current.setAttribute("visited", true);
-                markNodeVisited(current, "blue", nodeVisitDelay);
+            if (current.equals(targetNode)) {
+                markNodeVisited(current, "orange", nodeVisitDelay);
+                break;
+            }
 
-                if (current.equals(targetNode)) {
-                    markNodeVisited(current, "orange", nodeVisitDelay);
-                    break;
-                }
-
-                for (Edge edge : current.getEdgeSet()) {
-                    Node neighbor = edge.getOpposite(current);
-                    if (neighbor.getAttribute("visited") == null) {
-                        stack.push(neighbor);
-                        markNodeInProcess(neighbor, edge, edgeVisitDelay);
-                        neighbor.setAttribute("parent", current); // Маркирање родитеља
-                    }
+            for (Edge edge : current.getEdgeSet()) {
+                Node neighbor = edge.getOpposite(current);
+                if (neighbor.getAttribute("visited") == null) {
+                    neighbor.setAttribute("visited", true);
+                    stack.add(neighbor);
+                    markNodeInProcess(neighbor, edge, edgeVisitDelay);
                 }
             }
         }

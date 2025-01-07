@@ -29,7 +29,6 @@ public class BFS {
                     queue.add(neighbor);
                     markNodeVisited(neighbor, "green");
 
-
                     // Optionally, set the parent node attribute
                     neighbor.setAttribute("parent", current);
 

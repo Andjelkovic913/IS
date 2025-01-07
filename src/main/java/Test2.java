@@ -4,6 +4,8 @@ import org.graphstream.graph.implementations.SingleGraph;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 public class Test2 {
@@ -50,12 +52,17 @@ public class Test2 {
 
         // Calculate and display heuristic values
         Node targetNode = graph.getNode("A 14");
+
+        // Map to store heuristic values of each node
+        Map<Node, Double> heuristicMap = new HashMap<>();
         for (Node node : graph) {
             double heuristic = HillClimb.getHeuristicValue(node, targetNode);
+            heuristicMap.put(node, heuristic);
             node.setAttribute("ui.label", node.getAttribute("ui.label") + " (h=" + String.format("%.2f", heuristic) + ")");
             System.out.println("Node " + node.getId() + " heuristic: " + heuristic);
         }
 
+        // Now passing the heuristic map to Astar algorithm
         JFrame prozor = new JFrame();
         prozor.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         prozor.setSize(400, 200);
@@ -88,7 +95,7 @@ public class Test2 {
                             break;
                         case 4:
                             System.out.println("Running A* Search:");
-                            Astar.astar(graph, graph.getNode("A 0"), graph.getNode("A 14"), 5, 500, 500);
+                            Astar.astar(graph, graph.getNode("A 0"), graph.getNode("A 14"), heuristicMap, 500, 500);
                             break;
                     }
                 } catch (Exception ex) {
