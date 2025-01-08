@@ -30,12 +30,12 @@ public class BestFirstSearch {
                     // Koristimo istu heuristiku kao u HillClimbing
                     double priority = getHeuristicValue(neighbor, targetNode);
                     updateNeighborPriority(neighbor, priority, openSet);
-                    neighbor.setAttribute("parent", current); // Oznaciti roditelja
+                    neighbor.setAttribute("parent", current);
                     markEdgeTraversed(edge, edgeVisitDelay);
                 }
             }
 
-            current.setAttribute("visited", true); // Oznaciti kao posećen nakon obrade
+            current.setAttribute("visited", true);
         }
     }
 

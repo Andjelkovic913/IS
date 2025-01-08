@@ -8,42 +8,41 @@ public class HillClimb {
     public static void hillClimbing(Graph graph, Node startNode, Node targetNode, int nodeVisitDelay, int edgeVisitDelay) throws InterruptedException {
         // Иницијализација - постављање свих чворова као "непосећених"
         for (Node node : graph) {
-            node.setAttribute("visited", false);  // Постављамо све чворове као непосећене
+            node.setAttribute("visited", false);  // Ovo nije potrebno, bilo je potrebno za neki drugi slucaj ali sam ispravio ovo se moze i obrisati
         }
 
         Stack<Node> stack = new Stack<>();
-        stack.push(startNode);  // Додајемо почетни чвор на стек
+        stack.push(startNode);
         startNode.setAttribute("visited", true);
 
         while (!stack.isEmpty()) {
-            Node currentNode = stack.pop();  // Узимамо чвор са врха стека
+            Node currentNode = stack.pop();
             currentNode.setAttribute("visited", true);
             // Обележавамо чвор као посећен
             markNodeVisited(currentNode, "blue", nodeVisitDelay);
 
             // Ако је тренутни чвор циљ, прекинути претрагу
             if (currentNode.equals(targetNode)) {
-                markNodeVisited(currentNode, "orange", nodeVisitDelay); // Обојити циљ у наранџасто
+                markNodeVisited(currentNode, "orange", nodeVisitDelay);
                 System.out.println("Циљни чвор пронађен!");
-                reconstructPath(currentNode); // Реконструкција пута
+                reconstructPath(currentNode);
                 return;
             }
 
-            // Дохватити непосећене суседе
+            // Uzima neposecene susede
             List<Node> neighbors = getUnvisitedNeighbors(currentNode);
 
-            // Сортирати суседе по вредностима хеуристике у растућем редоследу
+            // Rastuce sortiranje
             neighbors.sort(Comparator.comparingDouble(neighbor -> getHeuristicValue(neighbor, targetNode)));
 
-            // Додати сортиране суседе на стек, редом од последњег до првог
             for (int i = neighbors.size() - 1; i >= 0; i--) {
                 Node neighbor = neighbors.get(i);
-                neighbor.setAttribute("parent", currentNode);  // Обележавамо родитеља суседа
-                stack.push(neighbor);  // Додајемо суседа на врх стека
-                neighbor.setAttribute("ui.style", "fill-color: green;"); // Обојити суседа у зелено
+                neighbor.setAttribute("parent", currentNode);
+                stack.push(neighbor);
+                neighbor.setAttribute("ui.style", "fill-color: green;");
 
 
-                // Обележавамо ивицу као пређену
+
                 Edge edge = currentNode.getEdgeBetween(neighbor);
                 if (edge != null) {
                     markEdgeTraversed(edge, edgeVisitDelay);
@@ -51,10 +50,10 @@ public class HillClimb {
             }
         }
 
-        System.out.println("Претрага није била успешна.");
+        System.out.println("Pretraga nije bila uspesna.");
     }
 
-    // Метод за добијање свих непосећених суседа тренутног чвора
+
     private static List<Node> getUnvisitedNeighbors(Node node) {
         List<Node> unvisitedNeighbors = new ArrayList<>();
         for (Edge edge : node.getEdgeSet()) {
@@ -66,20 +65,20 @@ public class HillClimb {
         return unvisitedNeighbors;
     }
 
-    // Маркирамо чвор као посећен и мењамо његову боју
+
     private static void markNodeVisited(Node node, String color, int delay) throws InterruptedException {
         node.setAttribute("visited", true);
         node.setAttribute("ui.style", "fill-color: " + color + ";");
-        Thread.sleep(delay); // Delay за визуализацију
+        Thread.sleep(delay);
     }
 
-    // Маркирамо ивицу као пређену
+
     private static void markEdgeTraversed(Edge edge, int delay) throws InterruptedException {
         edge.setAttribute("ui.style", "fill-color: blue;");
-        Thread.sleep(delay); // Delay за визуализацију
+        Thread.sleep(delay);
     }
 
-    // Хеуристичка функција - Еуклидска дистанца (за графове у 2D простору)
+
     public static double getHeuristicValue(Node currentNode, Node targetNode) {
         double x1 = currentNode.getAttribute("x");
         double y1 = currentNode.getAttribute("y");
@@ -89,22 +88,22 @@ public class HillClimb {
         return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2)); // Еуклидска дистанца између два чвора
     }
 
-    // Реконструкција пута - праћење родитељских веза од циља до почетног чвора
+
     private static void reconstructPath(Node targetNode) {
         Node currentNode = targetNode;
         List<Node> path = new ArrayList<>();
 
-        // Реконструкција пута кроз родитељске везе
+
         while (currentNode != null) {
             path.add(currentNode);
             currentNode = currentNode.getAttribute("parent");
         }
 
-        // Исписивање пута од почетног до циљног чвора
-        System.out.println("Пут до циља:");
+
+        System.out.println("Put do cilja:");
         for (int i = path.size() - 1; i >= 0; i--) {
             System.out.print(path.get(i).getId() + " ");
         }
-        System.out.println(); // Нови ред за крај пута
+        System.out.println();
     }
 }
