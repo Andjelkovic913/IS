@@ -2,58 +2,72 @@ package algorithms;
 
 import org.graphstream.graph.*;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.PriorityQueue;
+import java.util.Set;
 
 public class BestFirstSearch {
 
     public static void bestFirstSearch(Graph graph, Node startNode, Node targetNode, int nodeVisitDelay, int edgeVisitDelay) throws InterruptedException {
         PriorityQueue<Node> openSet = new PriorityQueue<>(Comparator.comparingDouble(n -> (double) n.getAttribute("priority")));
+        Set<Node> visitedNodes = new HashSet<>();
 
-        // Koristimo istu heuristiku kao u HillClimbing
         startNode.setAttribute("priority", getHeuristicValue(startNode, targetNode));
         openSet.add(startNode);
-        markNodeVisited(startNode,"blue", nodeVisitDelay);
 
         while (!openSet.isEmpty()) {
             Node current = openSet.poll();
+
+            // Označi čvor kao posećen
+            if (visitedNodes.contains(current)) continue;
+            visitedNodes.add(current);
             markNodeVisited(current, "blue", nodeVisitDelay);
 
+            // Ako je cilj pronađen
             if (current.equals(targetNode)) {
                 markNodeVisited(current, "orange", nodeVisitDelay);
-                break;
+                reconstructPath(targetNode);
+                return;
             }
 
+            // Prođi kroz sve susede
             for (Edge edge : current.getEdgeSet()) {
                 Node neighbor = edge.getOpposite(current);
 
-                if (neighbor.getAttribute("visited") == null) {
-                    // Koristimo istu heuristiku kao u HillClimbing
+                if (!visitedNodes.contains(neighbor)) {
                     double priority = getHeuristicValue(neighbor, targetNode);
-                    updateNeighborPriority(neighbor, priority, openSet);
-                    neighbor.setAttribute("parent", current); // Oznaciti roditelja
+
+                    if (openSet.contains(neighbor)) {
+                        openSet.remove(neighbor); // Osveži ako se prioritet promeni
+                    }
+
+                    neighbor.setAttribute("priority", priority);
+                    neighbor.setAttribute("parent", current);
+                    neighbor.setAttribute("label", "priority: " + priority);
+                    openSet.add(neighbor);
+                    markNodeVisited(neighbor, "green", nodeVisitDelay);
+
                     markEdgeTraversed(edge, edgeVisitDelay);
                 }
             }
-
-            current.setAttribute("visited", true); // Oznaciti kao posećen nakon obrade
         }
+
+        System.out.println("Pretraga nije pronašla cilj.");
     }
 
-    private static void updateNeighborPriority(Node neighbor, double priority, PriorityQueue<Node> openSet) {
-        if (!openSet.contains(neighbor) ) {
-            neighbor.setAttribute("priority", priority);
-            neighbor.setAttribute("label", "priority: " + priority);
+    private static void reconstructPath(Node targetNode) {
+        Node current = targetNode;
+        StringBuilder path = new StringBuilder();
 
-
-            openSet.add(neighbor);    // Dodati sa novim prioritetom
-            neighbor.setAttribute("ui.style", "fill-color: green;");
-            neighbor.setAttribute("visited", true);
+        while (current != null) {
+            path.insert(0, current.getId() + " -> ");
+            current = current.getAttribute("parent");
         }
+        System.out.println("Path: " + path.substring(0, path.length() - 4));
     }
 
     private static void markNodeVisited(Node node, String color, int delay) throws InterruptedException {
         node.setAttribute("ui.style", "fill-color: " + color + ";");
-        node.setAttribute("visited", true);
         Thread.sleep(delay);
     }
 
@@ -62,15 +76,11 @@ public class BestFirstSearch {
         Thread.sleep(delay);
     }
 
-    // Heuristička funkcija koja koristi udaljenost između trenutnog čvora i ciljnog čvora
     private static double getHeuristicValue(Node currentNode, Node targetNode) {
-        // Pretpostavljamo da čvorovi imaju koordinate "x" i "y"
         double x1 = currentNode.getAttribute("x");
         double y1 = currentNode.getAttribute("y");
         double x2 = targetNode.getAttribute("x");
         double y2 = targetNode.getAttribute("y");
-
-        // Euklidska udaljenost između trenutnog i ciljnog čvora
         return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
     }
 }
