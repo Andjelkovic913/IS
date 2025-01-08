@@ -6,7 +6,7 @@ import java.util.*;
 public class HillClimb {
 
     public static void hillClimbing(Graph graph, Node startNode, Node targetNode, int nodeVisitDelay, int edgeVisitDelay) throws InterruptedException {
-        // Иницијализација - постављање свих чворова као "непосећених"
+
         for (Node node : graph) {
             node.setAttribute("visited", false);  // Ovo nije potrebno, bilo je potrebno za neki drugi slucaj ali sam ispravio ovo se moze i obrisati
         }
@@ -18,10 +18,8 @@ public class HillClimb {
         while (!stack.isEmpty()) {
             Node currentNode = stack.pop();
             currentNode.setAttribute("visited", true);
-            // Обележавамо чвор као посећен
             markNodeVisited(currentNode, "blue", nodeVisitDelay);
 
-            // Ако је тренутни чвор циљ, прекинути претрагу
             if (currentNode.equals(targetNode)) {
                 markNodeVisited(currentNode, "orange", nodeVisitDelay);
                 System.out.println("Циљни чвор пронађен!");

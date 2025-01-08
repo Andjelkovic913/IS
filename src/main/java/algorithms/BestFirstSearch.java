@@ -62,15 +62,15 @@ public class BestFirstSearch {
         Thread.sleep(delay);
     }
 
-    // Heuristička funkcija koja koristi udaljenost između trenutnog čvora i ciljnog čvora
+
     private static double getHeuristicValue(Node currentNode, Node targetNode) {
-        // Pretpostavljamo da čvorovi imaju koordinate "x" i "y"
+
         double x1 = currentNode.getAttribute("x");
         double y1 = currentNode.getAttribute("y");
         double x2 = targetNode.getAttribute("x");
         double y2 = targetNode.getAttribute("y");
 
-        // Euklidska udaljenost između trenutnog i ciljnog čvora
+
         return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
     }
 }
