@@ -28,16 +28,12 @@ public class BFS {
                 if (!isVisited(neighbor)) {
                     queue.add(neighbor);
                     markNodeVisited(neighbor, "green");
-
-                    // Optionally, set the parent node attribute
                     neighbor.setAttribute("parent", current);
-
-                    // If targetNode is found among the neighbors, we can optionally end early
+                    // Ako je ciljni cvor pronadjen medju susedima mozemo da zavrsimo ranije
                     if (neighbor.equals(targetNode)) {
                         markNodeVisited(neighbor, "orange");
                         return;
                     }
-
                     markEdgeTraversed(edge, "blue");
                     Thread.sleep(edgeVisitDelay);
                 }

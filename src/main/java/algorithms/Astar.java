@@ -19,13 +19,13 @@ public class Astar {
             markNodeVisited(current, "blue");
             Thread.sleep(nodeVisitDelay);
 
-            // Check if it's the target node
+            // Da li je cilj
             if (current.equals(targetNode)) {
                 markNodeVisited(current, "orange");
                 break;
             }
 
-            // Explore neighbors
+            // Prolaz kroz sve komsije
             for (Edge edge : current.getEdgeSet()) {
                 Node neighbor = edge.getOpposite(current);
                 double tentativePathCost = calculateTentativePathCost(current, edge);
