@@ -17,7 +17,7 @@ public class HillClimb {
 
         while (!stack.isEmpty()) {
             Node currentNode = stack.pop();  // Узимамо чвор са врха стека
-
+            currentNode.setAttribute("visited", true);
             // Обележавамо чвор као посећен
             markNodeVisited(currentNode, "blue", nodeVisitDelay);
 
@@ -41,7 +41,7 @@ public class HillClimb {
                 neighbor.setAttribute("parent", currentNode);  // Обележавамо родитеља суседа
                 stack.push(neighbor);  // Додајемо суседа на врх стека
                 neighbor.setAttribute("ui.style", "fill-color: green;"); // Обојити суседа у зелено
-                neighbor.setAttribute("visited", true); // Означити суседа као посећеног
+
 
                 // Обележавамо ивицу као пређену
                 Edge edge = currentNode.getEdgeBetween(neighbor);
