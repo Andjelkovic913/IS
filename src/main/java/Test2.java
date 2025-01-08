@@ -11,30 +11,28 @@ import java.util.Random;
 public class Test2 {
 
     public static void main(String[] args) throws InterruptedException {
-        // Initialize and configure the graph
+
         System.setProperty("org.graphstream.ui", "swing");
 
         Graph graph = new SingleGraph("Graph");
 
-        // Number of nodes
+
         int numNodes = 15;
         Random random = new Random();
 
-        // Add nodes to the graph
         for (int i = 0; i < numNodes; i++) {
             Node node = graph.addNode("A " + i);
             node.setAttribute("ui.label", "A" + i);
 
-            // Assign random coordinates to each node
-            double x = random.nextDouble() * 100;  // Random X coordinate
-            double y = random.nextDouble() * 100;  // Random Y coordinate
-            node.setAttribute("x", x);  // Set X attribute
-            node.setAttribute("y", y);  // Set Y attribute
+            double x = random.nextDouble() * 100;
+            double y = random.nextDouble() * 100;
+            node.setAttribute("x", x);
+            node.setAttribute("y", y);
         }
 
-        // Connect each node to a random previous node to form a tree
+        // Povezivanje svakog cvora sa prethodnim
         for (int i = 1; i < numNodes; i++) {
-            int parent = random.nextInt(i);  // Ensure we only connect to previous nodes to keep it acyclic
+            int parent = random.nextInt(i);
             double randomLength = random.nextInt(15) + 1;
             graph.addEdge("Edge" + parent + "_" + i, "A " + parent, "A " + i)
                     .setAttribute("length", randomLength);
@@ -50,10 +48,10 @@ public class Test2 {
 
         Thread.sleep(2000);
 
-        // Calculate and display heuristic values
+        // Definisanje ciljnog cvora
         Node targetNode = graph.getNode("A 14");
 
-        // Map to store heuristic values of each node
+        // Pravim mapu kako bih u a zvezda mogao da koristim vrednosti heuristike koje su zadate na pocetku
         Map<Node, Double> heuristicMap = new HashMap<>();
         for (Node node : graph) {
             double heuristic = HillClimb.getHeuristicValue(node, targetNode);
@@ -62,7 +60,7 @@ public class Test2 {
             System.out.println("Node " + node.getId() + " heuristic: " + heuristic);
         }
 
-        // Now passing the heuristic map to Astar algorithm
+
         JFrame prozor = new JFrame();
         prozor.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         prozor.setSize(400, 200);
